@@ -1,5 +1,5 @@
 class Calulator {
-    constructor(previousOperandTextElement, currentOperandTextElement){
+    constructor(previousOperandTextElement, currentOperandTextElement) {
         this.prevOperandTextElement = previousOperandTextElement;
         this.currOperandTextElement = currentOperandTextElement;
         this.clear();
@@ -46,7 +46,7 @@ class Calulator {
                 break;
             case '*':
                 computation = prev * curr;
-            break;
+                break;
             case '÷':
                 computation = prev / curr;
                 break;
@@ -59,9 +59,35 @@ class Calulator {
         this.prevOperand = '';
     }
 
+    getDisplayNumber(number) {
+        const stringNumber = number.toString();
+        const integerDigits = parseFloat(stringNumber.split('.')[0]);
+        const decimalDigits = stringNumber.split('.')[1];
+        let integerDisplay;
+        if (isNaN(integerDigits)) {
+            integerDisplay = '';
+        } else {
+            integerDisplay = integerDigits.toLocaleString('en', {
+                maximumFractionDigits: 0
+            });
+        }
+        if (decimalDigits != null) {
+            return `${integerDisplay}.${decimalDigits}`;
+        } else {
+            return integerDisplay;
+        }
+    }
+
     updateDisplay() {
-        currentOperandTextElement.innerText = this.currOperand;
-        previousOperandTextElement.innerText = this.prevOperand;
+        currentOperandTextElement.innerText =
+            this.getDisplayNumber(this.currOperand);
+
+        if (this.operation != null) {
+            previousOperandTextElement.innerText =
+                `${this.getDisplayNumber(this.prevOperand)} ${this.operation}`;
+        } else {
+            previousOperandTextElement.innerText = '';
+        }
     }
 }
 
